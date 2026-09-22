@@ -1,0 +1,29 @@
+# Maintainer: Kamal Dhital <kamal@recruitablehr.com>
+pkgname=portal-agent
+pkgver=0.1.0
+pkgrel=1
+pkgdesc="In-guest agent for Portal: vsock JSON-RPC bridge for clipboard, display, and Wayland integration"
+arch=('aarch64' 'x86_64')
+url="https://github.com/portal-project/portal-agent"
+license=('Apache')
+depends=('gcc-libs')
+makedepends=('cargo')
+source=("$pkgname-$pkgver.tar.gz::https://github.com/portal-project/portal-agent/archive/v$pkgver.tar.gz")
+sha256sums=('SKIP')
+
+build() {
+  cd "$pkgname-$pkgver"
+  cargo build --release --locked
+}
+
+check() {
+  cd "$pkgname-$pkgver"
+  cargo test --release --locked
+}
+
+package() {
+  cd "$pkgname-$pkgver"
+  install -Dm755 target/release/portal-agent "$pkgdir/usr/local/bin/portal-agent"
+  install -Dm644 packaging/portal-agent.service "$pkgdir/usr/lib/systemd/system/portal-agent.service"
+  install -Dm644 LICENSE "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
+}

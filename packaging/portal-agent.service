@@ -1,0 +1,12 @@
+[Unit]
+Description=Portal guest agent (vsock JSON-RPC bridge to macOS host)
+After=network.target
+
+[Service]
+Type=simple
+ExecStart=/usr/local/bin/portal-agent
+Restart=on-failure
+RestartSec=2
+
+[Install]
+WantedBy=multi-user.target
